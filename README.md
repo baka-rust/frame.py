@@ -1,6 +1,4 @@
 # frame.py
-
-## about
 frame.py is a web application framework for Python a la Django and web.py. It's nothing new, but gets things done the way I like them done.
 It uses a regex driven URL to function mapping, jinja2 for templating, and wsgi for server communication.
 
