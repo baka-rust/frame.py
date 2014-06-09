@@ -5,7 +5,7 @@ frame.py is a web application framework for Python a la Django and web.py. It's 
 It uses a regex driven URL to function mapping, jinja2 for templating, and wsgi for server communication.
 
 ## example
-'''python
+```python
 import frame
 
 # define a function to respond to a url
@@ -20,4 +20,4 @@ urlPatterns = [
 # initiate a Frame object and run the test server
 app = frame.Frame(urlPatterns)
 app.testServer(80)
-'''
+```
