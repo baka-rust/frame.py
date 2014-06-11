@@ -17,12 +17,22 @@ class Frame:
 					return rule[1](Request(environmentVariables, result.group(1))) #accomidate multiple captures
 				else:
 					return rule[1](Request(environmentVariables, None))
-		return "error: 404" # handle this better
+		raise Http404
 		
 	def application(self, environmentVariables, startResponse):
-		responseBody = self.handleUrl(environmentVariables)
-		status = '200 OK' # assuming no fail
+		status = '200 OK'
+
+		try:
+			responseBody = self.handleUrl(environmentVariables)
+		except Http404:
+			status = '404 Not Found'
+			responseBody = 'Not found: ' + environmentVariables['PATH_INFO'] # custom 404 page?
+		except Redirect, e:
+			status = '301 Moved Permanently'
+			headers.append(('Location', e.location))
+			responseBody = ''
 		responseHeaders = [('Content-Type', 'text/html'), ('Content-Length', str(len(responseBody)))]
+
 		startResponse(status, responseHeaders)
 		return [responseBody]
 	
@@ -33,8 +43,16 @@ class Frame:
 		while True:
 			httpd.handle_request()
 
+class Http404(Exception):
+	pass
+	
+class Redirect(Exception):
+	def __init__(self, location):
+		self.location = location
+
 class Request:
 	
 	def __init__(self, environmentVariables, capturedData):
+		self.type = environmentVariables["REQUEST_METHOD"]
 		self.environmentVariables = environmentVariables
 		self.capturedData = capturedData
