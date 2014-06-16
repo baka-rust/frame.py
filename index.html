@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Frame.py by baka-rust</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">Frame.py</h1>
+        <p class="header">python webapp framework with wsgi</p>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/baka-rust/frame.py/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/baka-rust/frame.py/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/baka-rust/frame.py">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/baka-rust">baka-rust</a></p>
+
+
+      </header>
+      <section>
+        <h1>
+<a name="framepy" class="anchor" href="#framepy"><span class="octicon octicon-link"></span></a>frame.py</h1>
+
+<p>frame.py is a web application framework for Python a la Django and web.py. It's nothing new, but gets things done the way I like them done.
+It uses a regex driven URL to function mapping, jinja2 for templating, and wsgi for server communication.</p>
+
+<h2>
+<a name="example-with-decorators" class="anchor" href="#example-with-decorators"><span class="octicon octicon-link"></span></a>example with decorators</h2>
+
+<div class="highlight highlight-python"><pre><span class="kn">from</span> <span class="nn">frame</span> <span class="kn">import</span> <span class="n">Frame</span><span class="p">,</span> <span class="n">Http404</span><span class="p">,</span> <span class="n">Redirect</span>
+
+<span class="c"># initiate a Frame object</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">Frame</span><span class="p">()</span>
+
+<span class="c"># define a function to respond to a url, with its pattern in the decorator</span>
+<span class="nd">@app.route</span><span class="p">(</span><span class="s">"^/count/([1-9]*)$"</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">count</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s">"GET"</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">"you entered "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">capturedData</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">Http404</span>
+
+<span class="c"># run the test server</span>
+<span class="n">app</span><span class="o">.</span><span class="n">testServer</span><span class="p">(</span><span class="mi">80</span><span class="p">)</span>
+</pre></div>
+
+<h2>
+<a name="example-with-pattern-list" class="anchor" href="#example-with-pattern-list"><span class="octicon octicon-link"></span></a>example with pattern list</h2>
+
+<div class="highlight highlight-python"><pre><span class="kn">import</span> <span class="nn">frame</span>
+
+<span class="c"># define a function to respond to a url</span>
+<span class="k">def</span> <span class="nf">count</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s">"you entered "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">capturedData</span><span class="p">)</span>
+
+<span class="c"># define a pattern to map to that function  </span>
+<span class="n">urlPatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s">"^/count/([1-9]*)$"</span><span class="p">,</span> <span class="n">count</span><span class="p">),</span>
+<span class="p">]</span>
+
+<span class="c"># initiate a Frame object and run the test server</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">urlPatterns</span><span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">testServer</span><span class="p">(</span><span class="mi">80</span><span class="p">)</span>
+</pre></div>
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="http://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>
