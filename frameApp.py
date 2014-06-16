@@ -5,7 +5,10 @@ def index(request):
 	return "hello world." # call frame.render on template here
 	
 def count(request):
-	return "you entered " + str(request.capturedData)
+	if request.type == "GET":
+		return "you entered " + str(request.capturedData)
+	else:
+		raise frame.Http404
 	
 # urls
 urlPatterns = [

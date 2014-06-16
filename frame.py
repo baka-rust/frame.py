@@ -3,8 +3,14 @@ from wsgiref.simple_server import make_server
 
 class Frame:
 	
-	def __init__(self, urlPatterns):
+	def __init__(self, urlPatterns=[]):
 		self.urlPatterns = urlPatterns
+	
+	def route(self, pattern):
+		def decorator(method):
+			self.urlPatterns.append((pattern, method))
+			return method
+		return decorator
 	
 	def handleUrl(self, environmentVariables):
 		url = environmentVariables["PATH_INFO"]
@@ -43,16 +49,16 @@ class Frame:
 		while True:
 			httpd.handle_request()
 
-class Http404(Exception):
-	pass
-	
-class Redirect(Exception):
-	def __init__(self, location):
-		self.location = location
-
 class Request:
 	
 	def __init__(self, environmentVariables, capturedData):
 		self.type = environmentVariables["REQUEST_METHOD"]
 		self.environmentVariables = environmentVariables
 		self.capturedData = capturedData
+		
+class Http404(Exception):
+	pass
+	
+class Redirect(Exception):
+	def __init__(self, location):
+		self.location = location

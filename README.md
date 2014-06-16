@@ -2,7 +2,26 @@
 frame.py is a web application framework for Python a la Django and web.py. It's nothing new, but gets things done the way I like them done.
 It uses a regex driven URL to function mapping, jinja2 for templating, and wsgi for server communication.
 
-## example
+## example with decorators
+```python
+from frame import Frame, Http404, Redirect
+
+# initiate a Frame object
+app = Frame()
+
+# define a function to respond to a url, with its pattern in the decorator
+@app.route("^/count/([1-9]*)$")
+def count(request):
+	if request.type == "GET":
+		return "you entered " + str(request.capturedData)
+	else:
+		raise Http404
+
+# run the test server
+app.testServer(80)
+```
+
+## example with pattern list
 ```python
 import frame
 
