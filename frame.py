@@ -27,7 +27,7 @@ class Frame:
 		
 	def application(self, environmentVariables, startResponse):
 		status = '200 OK'
-
+		responseHeaders = [('Content-Type', 'text/html')]
 		try:
 			responseBody = self.handleUrl(environmentVariables)
 		except Http404:
@@ -35,9 +35,9 @@ class Frame:
 			responseBody = 'Not found: ' + environmentVariables['PATH_INFO'] # custom 404 page?
 		except Redirect, e:
 			status = '301 Moved Permanently'
-			headers.append(('Location', e.location))
+			responseHeaders.append(('Location', e.location))
 			responseBody = ''
-		responseHeaders = [('Content-Type', 'text/html'), ('Content-Length', str(len(responseBody)))]
+		responseHeaders.append(('Content-Length', str(len(responseBody))))
 
 		startResponse(status, responseHeaders)
 		return [responseBody]
