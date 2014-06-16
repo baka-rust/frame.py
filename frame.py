@@ -1,10 +1,13 @@
-import re
+import re, os
 from wsgiref.simple_server import make_server
 
 class Frame:
 	
-	def __init__(self, urlPatterns=[]):
+	def __init__(self, urlPatterns=[], staticDir = "static/"):
 		self.urlPatterns = urlPatterns
+		self.staticDir = staticDir
+		if staticDir:
+			self.urlPatterns.insert(0, ("^/static/(.*)$", self.staticUrl))
 	
 	def route(self, pattern):
 		def decorator(method):
@@ -20,16 +23,27 @@ class Frame:
 			result = re.search(rule[0], url)
 			if result:
 				if len(result.groups()) > 0:
-					return rule[1](Request(environmentVariables, result.group(1))) #accomidate multiple captures
+					return rule[1](Request(environmentVariables, result)) #accomidate multiple captures
 				else:
 					return rule[1](Request(environmentVariables, None))
 		raise Http404
+		
+	def staticUrl(self, request):
+		path = request.capturedData.group(1)
+		try:
+			f = open(self.staticDir+path, 'rb')
+			return Response(f.read(), "static")
+		except:
+			raise Http404
 		
 	def application(self, environmentVariables, startResponse):
 		status = '200 OK'
 		responseHeaders = [('Content-Type', 'text/html')]
 		try:
-			responseBody = self.handleUrl(environmentVariables)
+			response = self.handleUrl(environmentVariables)
+			responseBody = response.body
+			if response.type == "static":
+				responseHeaders = [('Content-Type', '')]
 		except Http404:
 			status = '404 Not Found'
 			responseBody = 'Not found: ' + environmentVariables['PATH_INFO'] # custom 404 page?
@@ -50,12 +64,17 @@ class Frame:
 			httpd.handle_request()
 
 class Request:
-	
 	def __init__(self, environmentVariables, capturedData):
 		self.type = environmentVariables["REQUEST_METHOD"]
 		self.environmentVariables = environmentVariables
 		self.capturedData = capturedData
-		
+
+class Response:
+	def __init__(self, body, type="dynamic", status="200 OK"):
+		self.body = body
+		self.type = type
+		self.status = status
+				
 class Http404(Exception):
 	pass
 	

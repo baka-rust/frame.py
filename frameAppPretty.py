@@ -1,15 +1,15 @@
-from frame import Frame, Http404, Redirect
+from frame import Frame, Response, Http404, Redirect
  
 app = Frame()
  
 @app.route("^/$")
 def index(request):
-	return "hello world."
+	return Response("hello world.")
 	
 @app.route("^/count/([1-9]*)$")
 def count(request):
 	if request.type == "GET":
-		return "you entered " + str(request.capturedData)
+		return Response("you entered " + str(request.capturedData.group(1)))
 	else:
 		raise Http404
 

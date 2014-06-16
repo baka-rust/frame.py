@@ -4,7 +4,7 @@ It uses a regex driven URL to function mapping, jinja2 for templating, and wsgi 
 
 ## example with decorators
 ```python
-from frame import Frame, Http404, Redirect
+from frame import Frame, Response, Http404
 
 # initiate a Frame object
 app = Frame()
@@ -13,7 +13,7 @@ app = Frame()
 @app.route("^/count/([1-9]*)$")
 def count(request):
 	if request.type == "GET":
-		return "you entered " + str(request.capturedData)
+		return Response("you entered " + str(request.capturedData.group(1)))
 	else:
 		raise Http404
 
@@ -23,11 +23,14 @@ app.testServer(80)
 
 ## example with pattern list
 ```python
-import frame
+from frame import Frame, Response, Http404
 
 # define a function to respond to a url
 def count(request):
-	return "you entered " + str(request.capturedData)
+	if request.type == "GET":
+		return Response("you entered " + str(request.capturedData.group(1)))
+	else:
+		raise Http404
 
 # define a pattern to map to that function	
 urlPatterns = [
@@ -35,6 +38,6 @@ urlPatterns = [
 ]
 
 # initiate a Frame object and run the test server
-app = frame.Frame(urlPatterns)
+app = Frame(urlPatterns)
 app.testServer(80)
 ```

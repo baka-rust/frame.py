@@ -1,14 +1,14 @@
-import frame
+from frame import Frame, Response, Http404, Redirect
 
 # views
 def index(request):
-	return "hello world." # call frame.render on template here
+	return Response("hello world.") # call frame.render on template here
 	
 def count(request):
 	if request.type == "GET":
-		return "you entered " + str(request.capturedData)
+		return Response("you entered " + str(request.capturedData.group(1)))
 	else:
-		raise frame.Http404
+		raise Http404
 	
 # urls
 urlPatterns = [
@@ -17,5 +17,5 @@ urlPatterns = [
 ]
 
 # app running
-app = frame.Frame(urlPatterns)
+app = Frame(urlPatterns)
 #app.testServer(80)
