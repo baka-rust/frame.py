@@ -13,4 +13,5 @@ def count(request):
 	else:
 		raise Http404
 
-#app.testServer(80)
+if __name__ == '__main__':
+	app.testServer(80)
