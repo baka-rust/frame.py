@@ -25,7 +25,7 @@ class Frame:
 				if len(result.groups()) > 0:
 					return rule[1](Request(environmentVariables, result)) #accomidate multiple captures
 				else:
-					return rule[1](Request(environmentVariables, None))
+					return rule[1](Request(environmentVariables))
 		raise Http404
 		
 	def staticUrl(self, request):
@@ -64,10 +64,11 @@ class Frame:
 			httpd.handle_request()
 
 class Request:
-	def __init__(self, environmentVariables, capturedData):
+	def __init__(self, environmentVariables, matchObject=None, urlData=None):
 		self.type = environmentVariables["REQUEST_METHOD"]
 		self.environmentVariables = environmentVariables
-		self.capturedData = capturedData
+		self.matchObject = matchObject
+		self.urlData = urlData
 
 class Response:
 	def __init__(self, body, type="dynamic", status="200 OK"):

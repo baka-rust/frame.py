@@ -13,7 +13,7 @@ app = Frame()
 @app.route("^/count/([1-9]*)$")
 def count(request):
 	if request.type == "GET":
-		return Response("you entered " + str(request.capturedData.group(1)))
+		return Response("you entered " + str(request.matchObject.group(1)))
 	else:
 		raise Http404
 
@@ -28,7 +28,7 @@ from frame import Frame, Response, Http404
 # define a function to respond to a url
 def count(request):
 	if request.type == "GET":
-		return Response("you entered " + str(request.capturedData.group(1)))
+		return Response("you entered " + str(request.matchObject.group(1)))
 	else:
 		raise Http404
 
