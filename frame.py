@@ -29,7 +29,7 @@ class Frame:
 		raise Http404
 		
 	def staticUrl(self, request):
-		path = request.capturedData.group(1)
+		path = request.matchObject.group(1)
 		try:
 			f = open(self.staticDir+path, 'rb')
 			return Response(f.read(), "static")
