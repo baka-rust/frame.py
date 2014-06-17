@@ -46,7 +46,7 @@ It uses a regex driven URL to function mapping, jinja2 for templating, and wsgi 
 <span class="nd">@app.route</span><span class="p">(</span><span class="s">"^/count/([1-9]*)$"</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">count</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s">"GET"</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="s">"you entered "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">capturedData</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="s">"you entered "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">matchObject</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)))</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">Http404</span>
 
@@ -62,7 +62,7 @@ It uses a regex driven URL to function mapping, jinja2 for templating, and wsgi 
 <span class="c"># define a function to respond to a url</span>
 <span class="k">def</span> <span class="nf">count</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s">"GET"</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="s">"you entered "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">capturedData</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="s">"you entered "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">matchObject</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)))</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">Http404</span>
 
