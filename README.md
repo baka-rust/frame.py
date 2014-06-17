@@ -43,7 +43,7 @@ app.testServer(80)
 ```
 
 ## deploying with google app engine
-Because frame.py uses WSGI, it is quite easy to set it up with the Google App Engigne.
+Because frame.py uses WSGI, it is quite easy to set it up with the Google App Engine.
 Simply create a new file in your project directory called *wsgi.py* or something to that effect. Inside, include:
 ```python
 # make sure {frameApp} actually matches the name of your application
@@ -59,8 +59,8 @@ handlers:
 If you would like to have app engine handle static files (recommended), modify your *app.yaml* to include (before the script handler):
 ```yaml
 handlers:
-- url: /stylesheets
-  static_dir: stylesheets
+- url: /static
+  static_dir: static
 ```
 And then change your frame.py application initialization to not serve static files.
 ```python
