@@ -1,4 +1,4 @@
-import re, os
+import re, os, urlparse
 from wsgiref.simple_server import make_server
 
 class Frame:
