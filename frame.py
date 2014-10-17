@@ -20,7 +20,10 @@ class Frame:
 		if len(url) > 1 and url[-1] == '/':
 			url = url[:-1]
 
-		contentLength = int(environmentVariables.get('CONTENT_LENGTH', default=0))
+		try:
+			contentLength = int(environmentVariables.get('CONTENT_LENGTH', 0))
+		except(ValueError):
+			contentLength = 0
 		
 		wsgiInput = urlparse.parse_qs(environmentVariables['wsgi.input'].read(contentLength))
 
