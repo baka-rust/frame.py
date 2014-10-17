@@ -19,13 +19,18 @@ class Frame:
 		url = environmentVariables["PATH_INFO"]
 		if len(url) > 1 and url[-1] == '/':
 			url = url[:-1]
+
+		contentLength = int(environmentVariables.get('CONTENT_LENGTH', default=0))
+		
+		wsgiInput = urlparse.parse_qs(environmentVariables['wsgi.input'].read(contentLength))
+
 		for rule in self.urlPatterns:
 			result = re.search(rule[0], url)
 			if result:
 				if len(result.groups()) > 0:
-					return rule[1](Request(environmentVariables, result)) #accomidate multiple captures
+					return rule[1](Request(environmentVariables, matchObject=result, wsgiInput = wsgiInput)) #accomidate multiple captures
 				else:
-					return rule[1](Request(environmentVariables))
+					return rule[1](Request(environmentVariables, wsgiInput = wsgiInput))
 		raise Http404
 		
 	def staticUrl(self, request):
@@ -64,11 +69,12 @@ class Frame:
 			httpd.handle_request()
 
 class Request:
-	def __init__(self, environmentVariables, matchObject=None, urlData=None):
+	def __init__(self, environmentVariables, matchObject=None, urlData=None, wsgiInput=None):
 		self.type = environmentVariables["REQUEST_METHOD"]
 		self.environmentVariables = environmentVariables
 		self.matchObject = matchObject
-		self.urlData = urlData
+		self.urlData = urlData # this is the get stuff
+		self.wsgiInput = wsgiInput
 
 class Response:
 	def __init__(self, body, type="dynamic", status="200 OK"):
